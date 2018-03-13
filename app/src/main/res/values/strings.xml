@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">NASA Rover Photos</string>
+    <string name="text_no_data_available">No photos found</string>
+    <string name="text_fetching_title">Fetching Data</string>
+    <string name="text_fetching_message">Fetching photos from server</string>
+    <string name="text_favorites">Favorites</string>
+    <string name="text_favorite_removed">Removed from Favorites</string>
+    <string name="text_favorited_added">Saved to Favorites</string>
+</resources>

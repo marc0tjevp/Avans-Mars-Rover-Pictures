@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:appcompat="http://schemas.android.com/apk/res-auto"
+    tools:context="nl.marcovp.avans.moviesearch.MainActivity">
+
+    <item
+        android:id="@+id/action_favorites"
+        android:icon="@drawable/ic_star_white_24dp"
+        appcompat:showAsAction="always"
+        android:title="@string/text_favorites"/>
+</menu>
