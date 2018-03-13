@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private PhotoAdapter photoAdapter;
     private ArrayList<Photo> photos = new ArrayList<>();
     RecyclerView listViewPhotos;
+    int check = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,9 +102,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        clear();
-        String item = parent.getItemAtPosition(position).toString();
-        getPicturesByCamera(item);
+        if (++check > 1) {
+            clear();
+            String item = parent.getItemAtPosition(position).toString();
+            getPicturesByCamera(item);
+        }
     }
 
     @Override
