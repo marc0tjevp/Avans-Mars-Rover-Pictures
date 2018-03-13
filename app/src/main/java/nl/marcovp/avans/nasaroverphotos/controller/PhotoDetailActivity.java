@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -23,19 +25,38 @@ import java.io.IOException;
 import nl.marcovp.avans.nasaroverphotos.datalayer.PhotoDBHandler;
 import nl.marcovp.avans.nasaroverphotos.domain.Photo;
 import nl.marcovp.avans.nasaroverphotos.R;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class PhotoDetailActivity extends AppCompatActivity {
 
     private PhotoDBHandler dbHandler = null;
     private Photo p;
     private FloatingActionButton fab;
-    ImageView imageView;
+    private ImageView imageView;
+    private PhotoViewAttacher photoAttacher;
+    private Callback imageLoadedCallback = new Callback() {
+
+        @Override
+        public void onSuccess() {
+            if (photoAttacher != null) {
+                photoAttacher.update();
+            } else {
+                photoAttacher = new PhotoViewAttacher(imageView);
+            }
+        }
+
+        @Override
+        public void onError() {
+            Log.e("PhotoDetailActivity", "Could not load image");
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_detail);
 
+        // Database Handler
         dbHandler = new PhotoDBHandler(
                 getApplicationContext(),
                 "photo.db",
@@ -43,14 +64,18 @@ public class PhotoDetailActivity extends AppCompatActivity {
                 1
         );
 
+        // Get Photo Object from Intent
         Intent i = getIntent();
         p = (Photo) i.getSerializableExtra("PHOTO");
 
+        // Set Image
         imageView = findViewById(R.id.imageview_photo);
-        TextView textView = findViewById(R.id.textview_photo);
+        Picasso.with(this).load(p.getImageURL()).into(imageView, imageLoadedCallback);
 
-        Picasso.with(this).load(p.getImageURL()).into(imageView);
+        // Set Camera Name
+        TextView textView = findViewById(R.id.textview_photo);
         textView.setText(p.getCameraName());
+
 
         fab = findViewById(R.id.fab_favorite);
 
@@ -71,6 +96,7 @@ public class PhotoDetailActivity extends AppCompatActivity {
                     // Feedback
                     fab.setImageDrawable(getDrawable(R.drawable.ic_star_border_white_24dp));
                     Snackbar.make(view, R.string.text_favorite_removed, Snackbar.LENGTH_SHORT).show();
+
                 } else {
 
                     // Insert Favorite
@@ -79,6 +105,7 @@ public class PhotoDetailActivity extends AppCompatActivity {
                     // Set drawable to favorite
                     fab.setImageDrawable(getDrawable(R.drawable.ic_star_white_24dp));
                     Snackbar.make(view, R.string.text_favorited_added, Snackbar.LENGTH_SHORT).show();
+
                 }
             }
         });

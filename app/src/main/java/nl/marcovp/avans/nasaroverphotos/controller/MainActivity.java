@@ -1,16 +1,21 @@
 package nl.marcovp.avans.nasaroverphotos.controller;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Surface;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -64,8 +69,20 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         listViewPhotos = findViewById(R.id.listview_photos);
         listViewPhotos.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        listViewPhotos.setLayoutManager(layoutManager);
+
+        // Get Devices orientation
+        Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        int rotation = display.getRotation();
+
+        // Choose layout based on orientation
+        if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+            listViewPhotos.setLayoutManager(layoutManager);
+        } else {
+            RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 3);
+            listViewPhotos.setLayoutManager(layoutManager);
+        }
+
         photoAdapter = new PhotoAdapter(photos);
         listViewPhotos.setAdapter(photoAdapter);
 
@@ -114,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
 
         // Set Date in Title
-        setTitle(R.string.app_name + dateFormat);
+        setTitle(getString(R.string.app_name) + " - " + dateFormat);
 
         Log.d("MainActivity", url);
 
