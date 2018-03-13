@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -186,6 +187,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
                     }
                 }, mYear, (mMonth - 1), mDay);
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, 2012);
+        cal.set(Calendar.MONTH, Calendar.AUGUST);
+        cal.set(Calendar.DAY_OF_MONTH, 6);
+
+        dpd.getDatePicker().setMaxDate(new Date().getTime());
+        dpd.getDatePicker().setMinDate(cal.getTimeInMillis());
         dpd.show();
     }
 }

@@ -28,16 +28,6 @@
             android:name=".controller.FavoritesActivity"
             android:label="Favorites"
             android:parentActivityName=".controller.MainActivity" />
-        <activity
-            android:name=".controller.PhotoDetailFullScreenActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_photo_detail_full_screen"
-            android:parentActivityName=".controller.PhotoDetailActivity"
-            android:theme="@style/FullscreenTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="nl.marcovp.avans.nasaroverphotos.controller.PhotoDetailActivity" />
-        </activity>
     </application>
 
 </manifest>
