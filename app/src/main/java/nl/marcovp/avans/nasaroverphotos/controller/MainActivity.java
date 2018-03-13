@@ -32,13 +32,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private PhotoAdapter photoAdapter;
     private ArrayList<Photo> photos = new ArrayList<>();
-    RecyclerView listViewPhotos;
+    private RecyclerView listViewPhotos;
 
     // Get yesterday's date
     final Calendar c = Calendar.getInstance(TimeZone.getDefault());
     int mYear = c.get(Calendar.YEAR);
     int mMonth = (c.get(Calendar.MONTH)) + 1;
     int mDay = (c.get(Calendar.DAY_OF_MONTH)) - 1;
+
+    // Counter to disable triggering onItemSelected
+    int counter = 0;
 
     private String dateFormat;
     private String item;
@@ -51,8 +54,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         item = "ALL";
         dateFormat = mYear + "-" + mMonth + "-" + mDay;
 
-        if (savedInstanceState != null && (ArrayList<Photo>) savedInstanceState.getSerializable("photoArray") != null) {
+        if (savedInstanceState != null && savedInstanceState.getSerializable("photoArray") != null) {
             photos = (ArrayList<Photo>) savedInstanceState.getSerializable("photoArray");
+            dateFormat = savedInstanceState.getString("date");
         } else {
             testByDate(item, dateFormat);
         }
@@ -64,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         photoAdapter = new PhotoAdapter(photos);
         listViewPhotos.setAdapter(photoAdapter);
 
-
         fillSpinner();
 
         ImageButton calendarButton = findViewById(R.id.button_calendar);
@@ -74,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putString("date", dateFormat);
         outState.putSerializable("photoArray", photos);
     }
 
@@ -113,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Spinner cameraSpinner = findViewById(R.id.spinner_cameras);
         cameraSpinner.setOnItemSelectedListener(this);
 
+        // Hardcoded Camera Names
         ArrayList<String> cameras = new ArrayList<>();
         cameras.add("ALL");
         cameras.add("FHAZ");
@@ -129,8 +134,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        item = parent.getItemAtPosition(position).toString();
-        testByDate(item, dateFormat);
+        if (++counter > 1) {
+            item = parent.getItemAtPosition(position).toString();
+            testByDate(item, dateFormat);
+        }
     }
 
     @Override
