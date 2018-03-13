@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     public void getPicturesByCamera(String camera) {
         if (!camera.equals("ALL CAMERAS")) {
-            String[] urls = new String[]{"https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?1000=max&page=1&api_key=hkOe3Z4NdnkxYI8FlnnDMCc1o4Xuu8GRiClCnwFt&camera=" + camera};
+            String[] urls = new String[]{"https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=1000&page=1&api_key=hkOe3Z4NdnkxYI8FlnnDMCc1o4Xuu8GRiClCnwFt&camera=" + camera};
             System.out.println(urls[0]);
             PhotoFoundTask findPhotos = new PhotoFoundTask(this, this);
             findPhotos.execute(urls);
