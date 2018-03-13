@@ -1,43 +1,61 @@
 package nl.marcovp.avans.nasaroverphotos.controller;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 import nl.marcovp.avans.nasaroverphotos.domain.Photo;
 import nl.marcovp.avans.nasaroverphotos.util.PhotoAdapter;
 import nl.marcovp.avans.nasaroverphotos.R;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, PhotoFoundTask.OnPhotoAvailable {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, PhotoFoundTask.OnPhotoAvailable, View.OnClickListener {
 
     private PhotoAdapter photoAdapter;
     private ArrayList<Photo> photos = new ArrayList<>();
     RecyclerView listViewPhotos;
-    int check = 0;
+
+    // Get yesterday's date
+    final Calendar c = Calendar.getInstance(TimeZone.getDefault());
+    int mYear = c.get(Calendar.YEAR);
+    int mMonth = (c.get(Calendar.MONTH)) + 1;
+    int mDay = (c.get(Calendar.DAY_OF_MONTH)) - 1;
+
+    private String dateFormat;
+    private String item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        item = "ALL";
+        dateFormat = mYear + "-" + mMonth + "-" + mDay;
+
         if (savedInstanceState != null && (ArrayList<Photo>) savedInstanceState.getSerializable("photoArray") != null) {
             photos = (ArrayList<Photo>) savedInstanceState.getSerializable("photoArray");
         } else {
-            getAllPictures();
+            testByDate(item, dateFormat);
         }
-
-        fillSpinner();
 
         listViewPhotos = findViewById(R.id.listview_photos);
         listViewPhotos.setHasFixedSize(true);
@@ -45,6 +63,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         listViewPhotos.setLayoutManager(layoutManager);
         photoAdapter = new PhotoAdapter(photos);
         listViewPhotos.setAdapter(photoAdapter);
+
+
+        fillSpinner();
+
+        ImageButton calendarButton = findViewById(R.id.button_calendar);
+        calendarButton.setOnClickListener(this);
     }
 
     @Override
@@ -65,21 +89,24 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         photoAdapter.notifyDataSetChanged();
     }
 
-    public void getAllPictures() {
-        String[] urls = new String[]{"https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=1000&page=1&api_key=hkOe3Z4NdnkxYI8FlnnDMCc1o4Xuu8GRiClCnwFt"};
+    public void testByDate(String camera, String date) {
+        String url = "";
+        if (camera.contains("ALL")) {
+            url = "https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?api_key=hkOe3Z4NdnkxYI8FlnnDMCc1o4Xuu8GRiClCnwFt&earth_date=" + date;
+        } else {
+            Log.d("testByDate", "Camera doesn't contain all");
+            url = "https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?api_key=hkOe3Z4NdnkxYI8FlnnDMCc1o4Xuu8GRiClCnwFt&earth_date=" + date + "&camera=" + camera;
+        }
+
+        // Set Date in Title
+        setTitle("NASA Rover Photos - " + dateFormat);
+
+        Log.d("MainActivity", url);
+
+        clear();
+        String[] urls = new String[]{url};
         PhotoFoundTask findPhotos = new PhotoFoundTask(this, this);
         findPhotos.execute(urls);
-    }
-
-    public void getPicturesByCamera(String camera) {
-        if (!camera.equals("ALL CAMERAS")) {
-            String[] urls = new String[]{"https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?sol=1000&page=1&api_key=hkOe3Z4NdnkxYI8FlnnDMCc1o4Xuu8GRiClCnwFt&camera=" + camera};
-            System.out.println(urls[0]);
-            PhotoFoundTask findPhotos = new PhotoFoundTask(this, this);
-            findPhotos.execute(urls);
-        } else {
-            getAllPictures();
-        }
     }
 
     public void fillSpinner() {
@@ -87,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         cameraSpinner.setOnItemSelectedListener(this);
 
         ArrayList<String> cameras = new ArrayList<>();
-        cameras.add("ALL CAMERAS");
+        cameras.add("ALL");
         cameras.add("FHAZ");
         cameras.add("RHAZ");
         cameras.add("MAST");
@@ -102,11 +129,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if (++check > 1) {
-            clear();
-            String item = parent.getItemAtPosition(position).toString();
-            getPicturesByCamera(item);
-        }
+        item = parent.getItemAtPosition(position).toString();
+        testByDate(item, dateFormat);
     }
 
     @Override
@@ -114,9 +138,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void clear() {
-        final int size = photos.size();
-        photos.clear();
-        photoAdapter.notifyItemRangeRemoved(0, size);
+        if (photoAdapter != null) {
+            final int size = photos.size();
+            photos.clear();
+            photoAdapter.notifyItemRangeRemoved(0, size);
+        }
     }
 
     @Override
@@ -135,5 +161,24 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 return true;
         }
         return false;
+    }
+
+    @Override
+    public void onClick(View v) {
+        DatePickerDialog dpd = new DatePickerDialog(this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        dateFormat = "" + year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+                        testByDate(item, dateFormat);
+
+                        // Set Global Variables to remember selection
+                        mYear = year;
+                        mMonth = monthOfYear + 1;
+                        mDay = dayOfMonth;
+
+                    }
+                }, mYear, (mMonth - 1), mDay);
+        dpd.show();
     }
 }
