@@ -16,10 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -44,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     // Counter to disable triggering onItemSelected
     int counter = 0;
 
+    // Date and Camera
     private String dateFormat;
     private String item;
 
@@ -52,14 +50,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Start with all camera's and today's date
         item = "ALL";
         dateFormat = mYear + "-" + mMonth + "-" + mDay;
 
+        // Get saved instance if any, otherwise get new photos
         if (savedInstanceState != null && savedInstanceState.getSerializable("photoArray") != null) {
             photos = (ArrayList<Photo>) savedInstanceState.getSerializable("photoArray");
             dateFormat = savedInstanceState.getString("date");
         } else {
-            testByDate(item, dateFormat);
+            getPhotosByCameraAndDate(item, dateFormat);
         }
 
         listViewPhotos = findViewById(R.id.listview_photos);
@@ -69,8 +69,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         photoAdapter = new PhotoAdapter(photos);
         listViewPhotos.setAdapter(photoAdapter);
 
+        // Fill Spinner Menu with Camera's
         fillSpinner();
 
+        // Set listener on calendar button
         ImageButton calendarButton = findViewById(R.id.button_calendar);
         calendarButton.setOnClickListener(this);
     }
@@ -78,6 +80,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+
+        // Save selected date and photo array
         outState.putString("date", dateFormat);
         outState.putSerializable("photoArray", photos);
     }
@@ -85,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+
+        // Restore photo array
         photos = (ArrayList<Photo>) savedInstanceState.getSerializable("photoArray");
     }
 
@@ -94,27 +100,36 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         photoAdapter.notifyDataSetChanged();
     }
 
-    public void testByDate(String camera, String date) {
+    public void getPhotosByCameraAndDate(String camera, String date) {
+
+        // Make sure URL is empty
         String url = "";
+
+        // If the camera is "ALL" don't specify a Camera.
         if (camera.contains("ALL")) {
             url = "https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?api_key=hkOe3Z4NdnkxYI8FlnnDMCc1o4Xuu8GRiClCnwFt&earth_date=" + date;
         } else {
-            Log.d("testByDate", "Camera doesn't contain all");
+            Log.d("MainAcitivity", "Camera doesn't contain all");
             url = "https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?api_key=hkOe3Z4NdnkxYI8FlnnDMCc1o4Xuu8GRiClCnwFt&earth_date=" + date + "&camera=" + camera;
         }
 
         // Set Date in Title
-        setTitle("NASA Rover Photos - " + dateFormat);
+        setTitle(R.string.app_name + dateFormat);
 
         Log.d("MainActivity", url);
 
+        // Clear the adapter to prepare for new dataset
         clear();
+
+        // Start Async task
         String[] urls = new String[]{url};
         PhotoFoundTask findPhotos = new PhotoFoundTask(this, this);
         findPhotos.execute(urls);
     }
 
     public void fillSpinner() {
+
+        // Set listener on Spinner Menu
         Spinner cameraSpinner = findViewById(R.id.spinner_cameras);
         cameraSpinner.setOnItemSelectedListener(this);
 
@@ -129,23 +144,30 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         cameras.add("MARDI");
         cameras.add("NAVCAM");
 
+        // Set standard arrayAdapter for Strings
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, cameras);
         cameraSpinner.setAdapter(dataAdapter);
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        // Prevent triggering onItemSelected onCreate
         if (++counter > 1) {
+            // Get Camera item from Spinner Menu
             item = parent.getItemAtPosition(position).toString();
-            testByDate(item, dateFormat);
+
+            // Get Photos by Camera and Date
+            getPhotosByCameraAndDate(item, dateFormat);
         }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+        // Do Nothing :)
     }
 
     public void clear() {
+        // Clear photo array and notify adapter
         if (photoAdapter != null) {
             final int size = photos.size();
             photos.clear();
@@ -155,6 +177,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate menu from XML
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.mainmenu, menu);
         return true;
@@ -177,8 +200,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        // Remember selected date
                         dateFormat = "" + year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
-                        testByDate(item, dateFormat);
+
+                        // Get photos from selected date and camera
+                        getPhotosByCameraAndDate(item, dateFormat);
 
                         // Set Global Variables to remember selection
                         mYear = year;
@@ -188,11 +214,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     }
                 }, mYear, (mMonth - 1), mDay);
 
+        // Set minimal date to date of landing
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, 2012);
         cal.set(Calendar.MONTH, Calendar.AUGUST);
         cal.set(Calendar.DAY_OF_MONTH, 6);
 
+        // Set maximal date to today
         dpd.getDatePicker().setMaxDate(new Date().getTime());
         dpd.getDatePicker().setMinDate(cal.getTimeInMillis());
         dpd.show();
