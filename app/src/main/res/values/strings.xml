@@ -6,4 +6,10 @@
     <string name="text_favorites">Favorites</string>
     <string name="text_favorite_removed">Removed from Favorites</string>
     <string name="text_favorited_added">Saved to Favorites</string>
+    <string name="text_open_image">Open Image</string>
+
+    <string name="title_activity_photo_detail_full_screen">PhotoDetailFullScreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="text_set_wallpaper">Set as wallpaper</string>
 </resources>

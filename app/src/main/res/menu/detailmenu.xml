@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:appcompat="http://schemas.android.com/apk/res-auto"
+    tools:context="nl.marcovp.avans.moviesearch.MainActivity">
+
+    <item
+        android:id="@+id/action_open"
+        android:icon="@drawable/ic_open_in_new_white_24dp"
+        appcompat:showAsAction="always"
+        android:title="@string/text_open_image"/>
+    <item
+        android:id="@+id/action_wallpaper"
+        android:icon="@drawable/ic_wallpaper_white_24dp"
+        appcompat:showAsAction="always"
+        android:title="@string/text_set_wallpaper"/>
+</menu>

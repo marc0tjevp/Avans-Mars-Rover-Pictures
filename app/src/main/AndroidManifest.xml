@@ -3,6 +3,7 @@
     package="nl.marcovp.avans.nasaroverphotos">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
 
     <application
         android:allowBackup="true"
@@ -20,7 +21,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".controller.PhotoDetailActivity"
             android:parentActivityName=".controller.MainActivity" />
@@ -28,6 +28,16 @@
             android:name=".controller.FavoritesActivity"
             android:label="Favorites"
             android:parentActivityName=".controller.MainActivity" />
+        <activity
+            android:name=".controller.PhotoDetailFullScreenActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_photo_detail_full_screen"
+            android:parentActivityName=".controller.PhotoDetailActivity"
+            android:theme="@style/FullscreenTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="nl.marcovp.avans.nasaroverphotos.controller.PhotoDetailActivity" />
+        </activity>
     </application>
 
 </manifest>
