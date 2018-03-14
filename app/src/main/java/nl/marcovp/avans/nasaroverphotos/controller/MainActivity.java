@@ -41,12 +41,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     // Get yesterday's date
     final Calendar c = Calendar.getInstance(TimeZone.getDefault());
-    int mYear = c.get(Calendar.YEAR);
-    int mMonth = (c.get(Calendar.MONTH)) + 1;
-    int mDay = (c.get(Calendar.DAY_OF_MONTH)) - 1;
+    private int mYear = c.get(Calendar.YEAR);
+    private int mMonth = (c.get(Calendar.MONTH)) + 1;
+    private int mDay = (c.get(Calendar.DAY_OF_MONTH)) - 1;
 
     // Counter to disable triggering onItemSelected
-    int counter = 0;
+    private int counter = 0;
 
     // Date and Camera
     private String dateFormat;
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         photoAdapter.notifyDataSetChanged();
     }
 
-    public void getPhotosByCameraAndDate(String camera, String date) {
+    private void getPhotosByCameraAndDate(String camera, String date) {
 
         // Make sure URL is empty
         String url = "";
@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         findPhotos.execute(urls);
     }
 
-    public void fillSpinner() {
+    private void fillSpinner() {
 
         // Debug Log
         Log.d(TAG, "fillSpinner");
@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // Do Nothing :)
     }
 
-    public void clear() {
+    private void clear() {
         // Clear photo array and notify adapter
         if (photoAdapter != null) {
             final int size = photos.size();

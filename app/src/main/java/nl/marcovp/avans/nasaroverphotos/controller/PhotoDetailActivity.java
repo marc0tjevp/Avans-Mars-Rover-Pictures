@@ -33,7 +33,6 @@ public class PhotoDetailActivity extends AppCompatActivity {
     private ImageView imageView;
     private PhotoViewAttacher photoAttacher;
     private Callback imageLoadedCallback = new Callback() {
-
         @Override
         public void onSuccess() {
             if (photoAttacher != null) {

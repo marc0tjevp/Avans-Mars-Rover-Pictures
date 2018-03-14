@@ -22,7 +22,7 @@ public class SetWallpaperTask extends AsyncTask<Void, Void, Boolean> {
     private boolean succes;
     private Context context;
 
-    public SetWallpaperTask(Bitmap bitmap, Context context) {
+    SetWallpaperTask(Bitmap bitmap, Context context) {
         this.bitmap = bitmap;
         this.context = context;
     }
