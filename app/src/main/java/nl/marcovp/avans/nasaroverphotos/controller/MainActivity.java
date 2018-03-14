@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private PhotoAdapter photoAdapter;
     private ArrayList<Photo> photos = new ArrayList<>();
     private RecyclerView listViewPhotos;
+    private String TAG = this.getClass().getSimpleName();
 
     // Get yesterday's date
     final Calendar c = Calendar.getInstance(TimeZone.getDefault());
@@ -55,9 +56,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Debug Log
+        Log.d(TAG, "onCreate");
+
         // Start with all camera's and today's date
         item = "ALL";
         dateFormat = mYear + "-" + mMonth + "-" + mDay;
+
+        // Debug Log
+        Log.d(TAG, item + " - " + dateFormat);
 
         // Get saved instance if any, otherwise get new photos
         if (savedInstanceState != null && savedInstanceState.getSerializable("photoArray") != null) {
@@ -83,6 +90,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             listViewPhotos.setLayoutManager(layoutManager);
         }
 
+        // Debug Log
+        Log.d(TAG, "Rotation: " + rotation);
+
+        // Set Adapter
         photoAdapter = new PhotoAdapter(photos);
         listViewPhotos.setAdapter(photoAdapter);
 
@@ -98,6 +109,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
+        // Debug Log
+        Log.d(TAG, "onSaveInstanceState");
+
         // Save selected date and photo array
         outState.putString("date", dateFormat);
         outState.putSerializable("photoArray", photos);
@@ -107,13 +121,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
+        // Debug Log
+        Log.d(TAG, "onRestoreInstanceState");
+
         // Restore photo array
         photos = (ArrayList<Photo>) savedInstanceState.getSerializable("photoArray");
     }
 
     @Override
     public void onPhotoAvailable(Photo p) {
+
+        // Debug Log
+        Log.d(TAG, "onPhotoAvailable - " + p.getImageURL());
+
+        // Add Photo to array
         photos.add(p);
+
+        // Notify Adapter of change
         photoAdapter.notifyDataSetChanged();
     }
 
@@ -133,7 +157,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // Set Date in Title
         setTitle(getString(R.string.app_name) + " - " + dateFormat);
 
-        Log.d("MainActivity", url);
+        // Debug Log
+        Log.d("MainActivity", "Constructed URL String: " + url);
 
         // Clear the adapter to prepare for new dataset
         clear();
@@ -145,6 +170,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     public void fillSpinner() {
+
+        // Debug Log
+        Log.d(TAG, "fillSpinner");
 
         // Set listener on Spinner Menu
         Spinner cameraSpinner = findViewById(R.id.spinner_cameras);
@@ -176,6 +204,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             // Get Photos by Camera and Date
             getPhotosByCameraAndDate(item, dateFormat);
         }
+
+        // Debug Log
+        Log.d(TAG, "onItemSelected got triggered");
+
     }
 
     @Override
@@ -190,6 +222,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             photos.clear();
             photoAdapter.notifyItemRangeRemoved(0, size);
         }
+
+        // Debug Log
+        Log.d(TAG, "Clear adapter and array");
     }
 
     @Override
@@ -213,6 +248,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void onClick(View v) {
+
+        //Debug Log
+        Log.d(TAG, "onClick DatePicker: " + dateFormat);
+
+        // DatePicker
         DatePickerDialog dpd = new DatePickerDialog(this,
                 new DatePickerDialog.OnDateSetListener() {
                     @Override

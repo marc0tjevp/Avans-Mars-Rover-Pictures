@@ -3,6 +3,7 @@ package nl.marcovp.avans.nasaroverphotos.controller;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,6 +31,7 @@ public class PhotoFoundTask extends AsyncTask<String, Void, String> {
     private OnPhotoAvailable listener = null;
     private Context context;
     private ProgressDialog progressDialog;
+    private String TAG = this.getClass().getSimpleName();
 
     PhotoFoundTask(OnPhotoAvailable listener, Context context) {
         this.listener = listener;
@@ -38,11 +40,20 @@ public class PhotoFoundTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPreExecute() {
+        // Debug Log
+        Log.d(TAG, "onPreExecute");
+
+        // Start progressDialog
         progressDialog = ProgressDialog.show(context, context.getResources().getString(R.string.text_fetching_title), context.getResources().getString(R.string.text_fetching_message), true);
     }
 
     @Override
     protected String doInBackground(String... strings) {
+
+        // Debug Log
+        Log.d(TAG, "doInBackground");
+
+        // Variables
         InputStream inputStream = null;
         int responseCode = -1;
         String movieUrl = strings[0];
@@ -50,21 +61,28 @@ public class PhotoFoundTask extends AsyncTask<String, Void, String> {
 
         try {
 
+            // Open Connection
             URL url = new URL(movieUrl);
             URLConnection connection = url.openConnection();
+
+            // Debug Log
+            Log.d(TAG, "doInBackground URL: " + url);
 
             if (!(connection instanceof HttpURLConnection)) {
                 return null;
             }
 
+            // Connect
             HttpURLConnection httpURLConnection = (HttpURLConnection) connection;
             httpURLConnection.setAllowUserInteraction(false);
             httpURLConnection.setInstanceFollowRedirects(true);
             httpURLConnection.setRequestMethod("GET");
             httpURLConnection.connect();
 
+            // Get Response Code
             responseCode = httpURLConnection.getResponseCode();
 
+            // On 200, set JSON data to String
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 inputStream = httpURLConnection.getInputStream();
                 response = getStringFromInputStream(inputStream);
@@ -72,6 +90,7 @@ public class PhotoFoundTask extends AsyncTask<String, Void, String> {
 
         } catch (IOException e) {
             e.printStackTrace();
+            Log.e(TAG, "IOException: " + e.getMessage());
         }
 
         return response;
@@ -79,6 +98,11 @@ public class PhotoFoundTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String response) {
+
+        // Debug Log
+        Log.d(TAG, "onPostExecute");
+
+        // Check if response is not empty
         if (response == null || Objects.equals(response, "")) {
             return;
         }
@@ -86,12 +110,19 @@ public class PhotoFoundTask extends AsyncTask<String, Void, String> {
         JSONObject jsonObject;
 
         try {
+
+            // Make JSON Object from string
             jsonObject = new JSONObject(response);
+
+            // Get photos array from data
             JSONArray photos = jsonObject.getJSONArray("photos");
 
             for (int i = 0; i < photos.length(); i++) {
+
+                // Get Photo object by index
                 JSONObject photo = photos.getJSONObject(i);
 
+                // Set variables
                 int photoID = photo.getInt("id");
                 int photoSol = photo.getInt("sol");
                 JSONObject photoCamera = photo.getJSONObject("camera");
@@ -99,16 +130,26 @@ public class PhotoFoundTask extends AsyncTask<String, Void, String> {
                 String photoURL = photo.getString("img_src");
                 Date earthDate = Date.valueOf(photo.getString("earth_date"));
 
+                // Create photo object
                 Photo p = new Photo(photoID, photoSol, photoCameraName, photoURL, earthDate);
 
+                // Debug Log
+                Log.d(TAG, "New Photo: " + p.getId());
+
+                // Return object to listener
                 listener.onPhotoAvailable(p);
 
             }
 
+            // Debug Log
+            Log.d(TAG, "Found " + photos.length() + " Photos");
 
         } catch (JSONException e) {
+            Log.e(TAG, "JSONEXCEPTION: " + e.getMessage());
             e.printStackTrace();
         }
+
+        // Dismiss progressDialog
         progressDialog.dismiss();
     }
 
@@ -116,8 +157,8 @@ public class PhotoFoundTask extends AsyncTask<String, Void, String> {
 
         BufferedReader br = null;
         StringBuilder sb = new StringBuilder();
-
         String line;
+
         try {
 
             br = new BufferedReader(new InputStreamReader(is));
@@ -140,6 +181,7 @@ public class PhotoFoundTask extends AsyncTask<String, Void, String> {
         return sb.toString();
     }
 
+    // Interface OnPhotoAvailable
     public interface OnPhotoAvailable {
         void onPhotoAvailable(Photo p);
     }

@@ -2,6 +2,7 @@ package nl.marcovp.avans.nasaroverphotos.util;
 
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,24 +30,37 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
         private View view;
         private ImageView imageViewPhoto;
         private TextView textViewID;
+        private String TAG = this.getClass().getSimpleName();
 
         ViewHolder(View v) {
             super(v);
             this.view = v;
             this.view.setOnClickListener(this);
 
+            // Find view elements
             imageViewPhoto = v.findViewById(R.id.imageView_photo_list);
             textViewID = v.findViewById(R.id.textview_photo_list);
         }
 
         @Override
         public void onClick(View v) {
+
+            // Debug Log
+            Log.d(TAG, "OnClick Row Item");
+
+            // Get Adapter position
             int position = getAdapterPosition();
+
+            // Get object from position
             Photo p = (Photo) photos.get(position);
 
+            // Create new Detail Intent
             Intent photoDetailIntent = new Intent(view.getContext().getApplicationContext(), PhotoDetailActivity.class);
+
+            // Insert photo object into intent
             photoDetailIntent.putExtra("PHOTO", p);
 
+            // Start Activity
             view.getContext().startActivity(photoDetailIntent);
         }
     }
@@ -65,8 +79,14 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+
+        // Get Photo from array
         Photo p = (Photo) this.photos.get(position);
+
+        // Set Image into imageView
         Picasso.with(holder.view.getContext()).load(p.getImageURL()).into(holder.imageViewPhoto);
+
+        // Set Id into textView
         holder.textViewID.setText(String.valueOf(p.getId()));
 
     }

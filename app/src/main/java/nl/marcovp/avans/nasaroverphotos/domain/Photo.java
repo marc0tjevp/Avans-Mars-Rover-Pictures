@@ -9,12 +9,14 @@ import java.sql.Date;
 
 public class Photo implements Serializable {
 
+    // Variables
     private int id;
     private int sol;
     private String cameraName;
     private String imageURL;
     private Date earthDate;
 
+    // Constructor
     public Photo(int id, int sol, String cameraName, String imageURL, Date earthDate) {
         this.id = id;
         this.sol = sol;
@@ -23,6 +25,7 @@ public class Photo implements Serializable {
         this.earthDate = earthDate;
     }
 
+    // Getters & Setters
     public int getId() {
         return id;
     }

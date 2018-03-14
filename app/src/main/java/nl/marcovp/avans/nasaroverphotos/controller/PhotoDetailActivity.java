@@ -3,6 +3,7 @@ package nl.marcovp.avans.nasaroverphotos.controller;
 import android.app.WallpaperManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -31,6 +32,7 @@ public class PhotoDetailActivity extends AppCompatActivity {
 
     private PhotoDBHandler dbHandler = null;
     private Photo p;
+    private String TAG = this.getClass().getSimpleName();
     private FloatingActionButton fab;
     private ImageView imageView;
     private PhotoViewAttacher photoAttacher;
@@ -43,6 +45,7 @@ public class PhotoDetailActivity extends AppCompatActivity {
             } else {
                 photoAttacher = new PhotoViewAttacher(imageView);
             }
+            Log.d(TAG, "Callback: Loaded image into view");
         }
 
         @Override
@@ -80,9 +83,20 @@ public class PhotoDetailActivity extends AppCompatActivity {
         fab = findViewById(R.id.fab_favorite);
 
         if (dbHandler.isFavorite(p.getId())) {
+
+            // Set image
             fab.setImageDrawable(getDrawable(R.drawable.ic_star_white_24dp));
+
+            // Debug Log
+            Log.d(TAG, "Image is favorite");
+
         } else {
+
+            // Set image
             fab.setImageDrawable(getDrawable(R.drawable.ic_star_border_white_24dp));
+
+            // Debug Log
+            Log.d(TAG, "Image is NOT favorite");
         }
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -123,22 +137,24 @@ public class PhotoDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_open:
+
+                // Open in browser
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(p.getImageURL()));
                 startActivity(browserIntent);
+
+                // Debug Log
+                Log.d(TAG, "Opened in browser");
+
                 break;
             case R.id.action_wallpaper:
-                imageView.buildDrawingCache();
-                Bitmap bitmap = imageView.getDrawingCache();
 
-                WallpaperManager wm = WallpaperManager.getInstance(this);
+                // Get image from imageView
+                Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
 
-                try {
-                    wm.setBitmap(bitmap);
-                    Toast.makeText(this, "Wallpaper has been set!", Toast.LENGTH_SHORT).show();
-                } catch (IOException e) {
-                    Toast.makeText(this, "Couldn't set wallpaper :(", Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
-                }
+                // Start Async task
+                SetWallpaperTask setWallpaperTask = new SetWallpaperTask(bitmap, this);
+                setWallpaperTask.execute();
+
                 break;
         }
         return false;
