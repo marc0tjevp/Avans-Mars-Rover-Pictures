@@ -106,7 +106,8 @@ public class PhotoFoundTask extends AsyncTask<String, Void, String> {
 
         // Check if response is not empty
         if (response == null || Objects.equals(response, "")) {
-            Toast.makeText(context, R.string.text_no_photos, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.text_no_internet, Toast.LENGTH_SHORT).show();
+            progressDialog.dismiss();
             return;
         }
 

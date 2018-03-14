@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.Surface;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -46,6 +47,10 @@ public class FavoritesActivity extends AppCompatActivity {
 
         // Set Array equal to array from dbHandler
         photos = dbHandler.getAllFavorites();
+
+        if (photos.size() < 1) {
+            Toast.makeText(this, R.string.text_no_favorites, Toast.LENGTH_SHORT).show();
+        }
 
         listViewPhotos = findViewById(R.id.listview_favorites);
         listViewPhotos.setHasFixedSize(true);

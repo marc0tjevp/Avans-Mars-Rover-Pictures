@@ -11,4 +11,6 @@
     <string name="text_wallpaper_set">Wallpaper has been set!</string>
     <string name="text_wallpaper_notset">Couldn\'t set wallpaper :(</string>
     <string name="text_no_photos">No photo\'s found…</string>
+    <string name="text_no_favorites">No Favorites Found :(</string>
+    <string name="text_no_internet">No Internet Connection :(</string>
 </resources>

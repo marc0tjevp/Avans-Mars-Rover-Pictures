@@ -142,28 +142,31 @@ public class PhotoDBHandler extends SQLiteOpenHelper {
         ArrayList<Photo> photos = new ArrayList<>();
 
         // Loop trough Cursor
-        cursor.moveToFirst();
-        while (!cursor.isLast()) {
 
-            // Set Variables
-            int id = cursor.getInt(cursor.getColumnIndex("id"));
-            int sol = cursor.getInt(cursor.getColumnIndex("sol"));
-            String cameraName = cursor.getString(cursor.getColumnIndex("cameraName"));
-            String imageURL = cursor.getString(cursor.getColumnIndex("imageURL"));
-            Date earthDate = Date.valueOf(cursor.getString(cursor.getColumnIndex("earthDate")));
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            while (!cursor.isLast()) {
 
-            // Add new Photo object to array
-            photos.add(new Photo(id, sol, cameraName, imageURL, earthDate));
+                // Set Variables
+                int id = cursor.getInt(cursor.getColumnIndex("id"));
+                int sol = cursor.getInt(cursor.getColumnIndex("sol"));
+                String cameraName = cursor.getString(cursor.getColumnIndex("cameraName"));
+                String imageURL = cursor.getString(cursor.getColumnIndex("imageURL"));
+                Date earthDate = Date.valueOf(cursor.getString(cursor.getColumnIndex("earthDate")));
 
-            // Move to next result, if any
-            cursor.moveToNext();
+                // Add new Photo object to array
+                photos.add(new Photo(id, sol, cameraName, imageURL, earthDate));
+
+                // Move to next result, if any
+                cursor.moveToNext();
+            }
+
+            // Close database
+            db.close();
+
+            // Close cursor
+            cursor.close();
         }
-
-        // Close database
-        db.close();
-
-        // Close cursor
-        cursor.close();
 
         // Return photos array
         return photos;

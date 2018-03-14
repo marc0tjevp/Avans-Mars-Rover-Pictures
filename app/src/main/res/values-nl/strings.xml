@@ -12,4 +12,6 @@
     <string name="text_wallpaper_set">Als wallpaper ingesteld</string>
     <string name="text_wallpaper_notset">Kon wallpaper niet instellen :(</string>
     <string name="text_no_photos">Geen foto\'s gevonden</string>
+    <string name="text_no_favorites">Geen Favorieten Gevonden :(</string>
+    <string name="text_no_internet">No Internet Connection :(</string>
 </resources>
