@@ -41,6 +41,7 @@ public class PhotoFoundTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPreExecute() {
+
         // Debug Log
         Log.d(TAG, "onPreExecute");
 

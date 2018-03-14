@@ -7,12 +7,8 @@
     <string name="text_favorite_removed">Removed from Favorites</string>
     <string name="text_favorited_added">Saved to Favorites</string>
     <string name="text_open_image">Open Image</string>
-
-    <string name="title_activity_photo_detail_full_screen">PhotoDetailFullScreenActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="text_set_wallpaper">Set as wallpaper</string>
     <string name="text_wallpaper_set">Wallpaper has been set!</string>
     <string name="text_wallpaper_notset">Couldn\'t set wallpaper :(</string>
-    <string name="text_no_photos">No photo\'s found...</string>
+    <string name="text_no_photos">No photo\'s found…</string>
 </resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NASA Rover Foto\'s</string>
+    <string name="text_no_data_available">Geen foto\'s gevonden</string>
+    <string name="text_fetching_title">Data Ophalen</string>
+    <string name="text_fetching_message">Foto\'s aan het ophalen van de server</string>
+    <string name="text_favorites">Favorieten</string>
+    <string name="text_favorite_removed">Verwijderd van Favorieten</string>
+    <string name="text_favorited_added">Toegevoegd aan Favorieten</string>
+    <string name="text_open_image">Open Foto</string>
+    <string name="text_set_wallpaper">Als wallpaper instellen</string>
+    <string name="text_wallpaper_set">Als wallpaper ingesteld</string>
+    <string name="text_wallpaper_notset">Kon wallpaper niet instellen :(</string>
+    <string name="text_no_photos">Geen foto\'s gevonden</string>
+</resources>

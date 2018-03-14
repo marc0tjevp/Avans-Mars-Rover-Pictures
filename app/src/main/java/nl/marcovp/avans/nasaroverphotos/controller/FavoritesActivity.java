@@ -28,6 +28,7 @@ public class FavoritesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        // Debug Log
         Log.d(TAG, "onCreate");
 
         super.onCreate(savedInstanceState);
