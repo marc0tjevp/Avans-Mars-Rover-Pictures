@@ -27,9 +27,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import nl.marcovp.avans.nasaroverphotos.R;
 import nl.marcovp.avans.nasaroverphotos.domain.Photo;
 import nl.marcovp.avans.nasaroverphotos.util.PhotoAdapter;
-import nl.marcovp.avans.nasaroverphotos.R;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, PhotoFoundTask.OnPhotoAvailable, View.OnClickListener {
 
