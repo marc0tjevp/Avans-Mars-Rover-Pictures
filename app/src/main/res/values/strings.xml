@@ -14,4 +14,5 @@
     <string name="text_set_wallpaper">Set as wallpaper</string>
     <string name="text_wallpaper_set">Wallpaper has been set!</string>
     <string name="text_wallpaper_notset">Couldn\'t set wallpaper :(</string>
+    <string name="text_no_photos">No photo\'s found...</string>
 </resources>

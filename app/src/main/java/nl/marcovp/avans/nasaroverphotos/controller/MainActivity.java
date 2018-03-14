@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -66,6 +67,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // Debug Log
         Log.d(TAG, item + " - " + dateFormat);
 
+        // Fill Spinner Menu with Camera's
+        fillSpinner();
+
         // Get saved instance if any, otherwise get new photos
         if (savedInstanceState != null && savedInstanceState.getSerializable("photoArray") != null) {
             photos = (ArrayList<Photo>) savedInstanceState.getSerializable("photoArray");
@@ -97,12 +101,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         photoAdapter = new PhotoAdapter(photos);
         listViewPhotos.setAdapter(photoAdapter);
 
-        // Fill Spinner Menu with Camera's
-        fillSpinner();
-
         // Set listener on calendar button
         ImageButton calendarButton = findViewById(R.id.button_calendar);
         calendarButton.setOnClickListener(this);
+
     }
 
     @Override

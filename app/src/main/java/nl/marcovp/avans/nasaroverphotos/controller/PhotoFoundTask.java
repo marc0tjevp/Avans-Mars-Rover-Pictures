@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -104,6 +105,7 @@ public class PhotoFoundTask extends AsyncTask<String, Void, String> {
 
         // Check if response is not empty
         if (response == null || Objects.equals(response, "")) {
+            Toast.makeText(context, R.string.text_no_photos, Toast.LENGTH_SHORT).show();
             return;
         }
 
