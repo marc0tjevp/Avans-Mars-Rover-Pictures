@@ -3,6 +3,7 @@ Nasa Rover Photos is a simple Android app to view photos taken by Curiousity, NA
 
 ## Main Screen
 ![Main Screen](main.jpg =250x)
+<img src="main.jpg" width="250">
 
 ## Look at photos per date
 ![Sort by Date](perdate.jpg =250x)
