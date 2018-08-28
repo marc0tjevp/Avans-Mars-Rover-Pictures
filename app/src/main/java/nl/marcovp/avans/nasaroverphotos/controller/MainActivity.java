@@ -20,8 +20,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private PhotoAdapter photoAdapter;
     private ArrayList<Photo> photos = new ArrayList<>();
     private RecyclerView listViewPhotos;
+    private TextView nothingFoundTextView;
+    private ImageView nothingFoundImageView;
     private String TAG = this.getClass().getSimpleName();
 
     // Get yesterday's date
@@ -78,8 +82,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             getPhotosByCameraAndDate(item, dateFormat);
         }
 
+        nothingFoundTextView = findViewById(R.id.empty_view);
+        nothingFoundImageView = findViewById(R.id.empty_view_image);
+
         listViewPhotos = findViewById(R.id.listview_photos);
         listViewPhotos.setHasFixedSize(true);
+        listViewPhotos.setItemViewCacheSize(30);
+        listViewPhotos.setDrawingCacheEnabled(true);
+        listViewPhotos.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 
         // Get Devices orientation
         Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
@@ -90,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
             listViewPhotos.setLayoutManager(layoutManager);
         } else {
-            RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 3);
+            RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 2);
             listViewPhotos.setLayoutManager(layoutManager);
         }
 
@@ -116,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         // Save selected date and photo array
         outState.putString("date", dateFormat);
+        outState.putString("item", item);
         outState.putSerializable("photoArray", photos);
     }
 
@@ -127,7 +138,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Log.d(TAG, "onRestoreInstanceState");
 
         // Restore photo array
-        photos = (ArrayList<Photo>) savedInstanceState.getSerializable("photoArray");
+//        photos = (ArrayList<Photo>) savedInstanceState.getSerializable("photoArray");
+        dateFormat = savedInstanceState.getString("date");
+        item = savedInstanceState.getString("item");
+
+        getPhotosByCameraAndDate(item, dateFormat);
+
+        // Debug
+        Toast.makeText(this, "DEBUG: " + dateFormat + " " + item, Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
@@ -136,11 +155,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         // Debug Log
         Log.d(TAG, "onPhotoAvailable - " + p.getImageURL());
 
+        // Hide Nothing Found Text
+        nothingFoundTextView.setVisibility(View.INVISIBLE);
+        nothingFoundImageView.setVisibility(View.INVISIBLE);
+
         // Add Photo to array
         photos.add(p);
 
         // Notify Adapter of change
         photoAdapter.notifyDataSetChanged();
+
     }
 
     private void getPhotosByCameraAndDate(String camera, String date) {
@@ -152,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         if (camera.contains("ALL")) {
             url = "https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?api_key=hkOe3Z4NdnkxYI8FlnnDMCc1o4Xuu8GRiClCnwFt&earth_date=" + date;
         } else {
-            Log.d("MainAcitivity", "Camera doesn't contain all");
+            Log.d(TAG, "Camera doesn't contain all");
             url = "https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?api_key=hkOe3Z4NdnkxYI8FlnnDMCc1o4Xuu8GRiClCnwFt&earth_date=" + date + "&camera=" + camera;
         }
 
@@ -283,5 +307,15 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         dpd.getDatePicker().setMaxDate(new Date().getTime());
         dpd.getDatePicker().setMinDate(cal.getTimeInMillis());
         dpd.show();
+    }
+
+    @Override
+    public void nothingAvailable() {
+
+        Log.d(TAG, "No pictures found with filters");
+
+        // Show nothing found text
+        nothingFoundTextView.setVisibility(View.VISIBLE);
+        nothingFoundImageView.setVisibility(View.VISIBLE);
     }
 }

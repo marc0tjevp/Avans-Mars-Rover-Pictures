@@ -145,6 +145,11 @@ public class PhotoFoundTask extends AsyncTask<String, Void, String> {
 
             }
 
+            // Return nothing available if the arraylist is empty
+            if (photos.length() < 1) {
+                listener.nothingAvailable();
+            }
+
             // Debug Log
             Log.d(TAG, "Found " + photos.length() + " Photos");
 
@@ -188,5 +193,6 @@ public class PhotoFoundTask extends AsyncTask<String, Void, String> {
     // Interface OnPhotoAvailable
     public interface OnPhotoAvailable {
         void onPhotoAvailable(Photo p);
+        void nothingAvailable();
     }
 }

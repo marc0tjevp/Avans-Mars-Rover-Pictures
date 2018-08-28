@@ -15,6 +15,7 @@ public class Photo implements Serializable {
     private String cameraName;
     private String imageURL;
     private Date earthDate;
+    private String thumbnailURL;
 
     // Constructor
     public Photo(int id, int sol, String cameraName, String imageURL, Date earthDate) {
@@ -23,6 +24,15 @@ public class Photo implements Serializable {
         this.cameraName = cameraName;
         this.imageURL = imageURL;
         this.earthDate = earthDate;
+    }
+
+    public Photo(int id, int sol, String cameraName, String imageURL, Date earthDate, String thumbnailURL) {
+        this.id = id;
+        this.sol = sol;
+        this.cameraName = cameraName;
+        this.imageURL = imageURL;
+        this.earthDate = earthDate;
+        this.thumbnailURL = thumbnailURL;
     }
 
     // Getters & Setters
@@ -64,5 +74,13 @@ public class Photo implements Serializable {
 
     public void setEarthDate(Date earthDate) {
         this.earthDate = earthDate;
+    }
+
+    public String getThumbnailURL() {
+        return thumbnailURL;
+    }
+
+    public void setThumbnailURL(String thumbnailURL) {
+        this.thumbnailURL = thumbnailURL;
     }
 }
