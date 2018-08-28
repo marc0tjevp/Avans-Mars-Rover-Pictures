@@ -268,6 +268,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 Intent i = new Intent(this, FavoritesActivity.class);
                 startActivity(i);
                 return true;
+            case R.id.action_info:
+                Intent intent = new Intent(this, InfoActivity.class);
+                startActivity(intent);
+                return true;
         }
         return false;
     }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NASA Rover Photos</string>
+    <string name="app_name">NASA Curiosity Photos</string>
     <string name="text_no_data_available">No photos found</string>
     <string name="text_fetching_title">Fetching Data</string>
     <string name="text_fetching_message">Fetching photos from server</string>
@@ -14,4 +14,5 @@
     <string name="text_no_favorites">No Favorites Found :(</string>
     <string name="text_no_internet">No Internet Connection :(</string>
     <string name="text_nothing_found">There are no photos found with these filters...</string>
+    <string name="text_info">Info</string>
 </resources>

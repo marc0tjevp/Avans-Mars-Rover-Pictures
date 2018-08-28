@@ -8,4 +8,10 @@
         android:icon="@drawable/ic_star_white_24dp"
         appcompat:showAsAction="always"
         android:title="@string/text_favorites"/>
+
+    <item
+        android:id="@+id/action_info"
+        android:icon="@drawable/ic_info_outline_white_24dp"
+        appcompat:showAsAction="ifRoom"
+        android:title="@string/text_info"/>
 </menu>

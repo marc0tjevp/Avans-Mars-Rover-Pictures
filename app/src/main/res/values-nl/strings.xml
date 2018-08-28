@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">NASA Rover Foto\'s</string>
+    <string name="app_name">NASA Curiosity Photos</string>
     <string name="text_no_data_available">Geen foto\'s gevonden</string>
     <string name="text_fetching_title">Data Ophalen</string>
     <string name="text_fetching_message">Foto\'s aan het ophalen van de server</string>

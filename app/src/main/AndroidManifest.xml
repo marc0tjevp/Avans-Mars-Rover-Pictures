@@ -28,6 +28,10 @@
             android:name=".controller.FavoritesActivity"
             android:label="Favorites"
             android:parentActivityName=".controller.MainActivity" />
+        <activity
+            android:name=".controller.InfoActivity"
+            android:label="Info"
+            android:parentActivityName=".controller.MainActivity" />
     </application>
 
 </manifest>
