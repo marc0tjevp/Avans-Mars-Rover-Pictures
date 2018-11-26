@@ -46,7 +46,7 @@
         android:clickable="true"
         android:focusable="true"
         android:src="@drawable/ic_star_white_24dp"
-        app:backgroundTint="@color/colorAccent"
+        app:backgroundTint="@color/colorDarkSienna"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.975"

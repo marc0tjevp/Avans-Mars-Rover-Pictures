@@ -5,4 +5,12 @@
     <color name="colorAccent">#2f417a</color>
     <color name="colorCameraText">#FFFFFF</color>
     <color name="colorFilterBar">#f1f1f1</color>
+
+    <!-- New Image Colors -->
+    <color name="colorSandyBrown">#FADA5C</color>
+    <color name="colorSienna">#9B4C2C</color>
+    <color name="colorDarkSienna">#76371e</color>
+    <color name="colorGainsboro">#E3EAE2</color>
+    <color name="colorDarkBlack">#343333</color>
+    <color name="colorDarkKhaki">#B28354</color>
 </resources>

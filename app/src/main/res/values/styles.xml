@@ -8,4 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="MarsTheme" parent="AppTheme" >
+        <item name="colorPrimary">@color/colorSienna</item>
+        <item name="colorPrimaryDark">@color/colorDarkBlack</item>
+        <item name="colorAccent">@color/colorDarkKhaki</item>
+        <item name="android:statusBarColor">@color/colorDarkSienna</item>
+    </style>
+
 </resources>
